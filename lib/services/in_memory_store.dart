@@ -72,7 +72,7 @@ class InMemoryStore extends ChangeNotifier {
         title: 'Farm Helper (1-day)',
         description: 'Assist with harvesting.',
         location: 'Machakos',
-        wage: 'KSh 800/day',
+        wage: 'Ksh 800/day',
       ),
       JobPost(
         id: 'j2',
