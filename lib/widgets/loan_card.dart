@@ -1,21 +1,29 @@
 import 'package:flutter/material.dart';
-import '../models/loan_model.dart';
 
 class LoanCard extends StatelessWidget {
-  final MicroLoan loan;
-  const LoanCard({super.key, required this.loan});
+  final String id;
+  final String requesterName;
+  final double amount;
+  final String purpose;
+  final double repaid;
+
+  const LoanCard({super.key, required this.id, required this.requesterName, required this.amount, required this.purpose, required this.repaid});
 
   @override
   Widget build(BuildContext context) {
+    final progress = (repaid / (amount == 0 ? 1 : amount)).clamp(0.0, 1.0);
     return Card(
-      margin: const EdgeInsets.all(10),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-      elevation: 4,
       child: ListTile(
-        title: Text(loan.requesterName, style: const TextStyle(fontWeight: FontWeight.bold)),
-        subtitle: Text(
-            "💰 Amount: KSh ${loan.amount}\n🎯 Purpose: ${loan.purpose}\n✅ Repaid: KSh ${loan.repaid}"),
-        trailing: const Icon(Icons.attach_money, color: Colors.teal),
+        leading: CircleAvatar(backgroundColor: Theme.of(context).colorScheme.primary, child: const Icon(Icons.monetization_on, color: Colors.white)),
+        title: Text(requesterName, style: const TextStyle(fontWeight: FontWeight.bold)),
+        subtitle: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Text('KSh ${amount.toStringAsFixed(0)} — $purpose'),
+          const SizedBox(height: 6),
+          LinearProgressIndicator(value: progress),
+          const SizedBox(height: 4),
+          Text('Repaid: KSh ${repaid.toStringAsFixed(0)}'),
+        ]),
+        isThreeLine: true,
       ),
     );
   }

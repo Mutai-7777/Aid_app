@@ -1,54 +1,39 @@
 import 'package:flutter/material.dart';
 
 class AppTheme {
-  static final lightTheme = ThemeData(
-    primarySwatch: Colors.blue,
+  static final Color primary = const Color(0xFF1767B1); // polished blue
+  static final Color accent = const Color(0xFF0EA5A4); // teal accent
+
+  static final ThemeData lightTheme = ThemeData(
+    useMaterial3: true,
+    colorScheme: ColorScheme.fromSeed(seedColor: primary),
+    primaryColor: primary,
     scaffoldBackgroundColor: Colors.grey[50],
-    appBarTheme: const AppBarTheme(
-      backgroundColor: Colors.blue,
+    appBarTheme: AppBarTheme(
+      backgroundColor: primary,
       foregroundColor: Colors.white,
       elevation: 2,
+      centerTitle: false,
     ),
-    cardTheme: const CardThemeData( // ✅ Changed from CardTheme → CardThemeData
-      color: Colors.white,
-      elevation: 3,
-      margin: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(12)),
+cardTheme: CardThemeData(
+  color: Colors.white,
+  shadowColor: Colors.grey,
+  elevation: 2,
+),
+
+
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: primary,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
       ),
     ),
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
-      fillColor: Colors.grey[200],
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
-        borderSide: BorderSide.none,
-      ),
-      focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
-        borderSide: const BorderSide(color: Colors.blue, width: 1.5),
-      ),
-    ),
-    elevatedButtonTheme: ElevatedButtonThemeData(
-      style: ElevatedButton.styleFrom(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
-        ),
-        backgroundColor: Colors.blue,
-        foregroundColor: Colors.white,
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
-        textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-      ),
-    ),
-    textTheme: const TextTheme(
-      headlineSmall: TextStyle(
-        fontWeight: FontWeight.bold,
-        color: Colors.black87,
-      ),
-      bodyMedium: TextStyle(
-        color: Colors.black87,
-        fontSize: 15,
-      ),
+      fillColor: Colors.white,
+      border: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: BorderSide.none),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
     ),
   );
 }

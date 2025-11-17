@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "363943754296",
+    "project_id": "aide-45089",
+    "storage_bucket": "aide-45089.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:363943754296:android:1ad9ec80f5be58496c44cd",
+        "android_client_info": {
+          "package_name": "com.example.aidconnect_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBxo5VP1egzN-jOpGpdcsQhSfSNwml8gXc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

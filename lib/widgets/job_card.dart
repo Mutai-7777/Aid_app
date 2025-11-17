@@ -1,20 +1,23 @@
 import 'package:flutter/material.dart';
-import '../models/job_model.dart';
 
 class JobCard extends StatelessWidget {
-  final JobPost job;
-  const JobCard({super.key, required this.job});
+  final String id;
+  final String title;
+  final String description;
+  final String location;
+  final String wage;
+  final String postedBy;
+
+  const JobCard({super.key, required this.id, required this.title, required this.description, required this.location, required this.wage, required this.postedBy});
 
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: const EdgeInsets.all(10),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-      elevation: 4,
       child: ListTile(
-        title: Text(job.title, style: const TextStyle(fontWeight: FontWeight.bold)),
-        subtitle: Text("${job.description}\n📍 ${job.location}\n💰 ${job.wage}"),
-        trailing: const Icon(Icons.work_outline, color: Colors.teal),
+        leading: CircleAvatar(backgroundColor: Theme.of(context).colorScheme.primary, child: const Icon(Icons.work, color: Colors.white)),
+        title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
+        subtitle: Text('$description\n📍 $location • $wage\nPosted by: $postedBy'),
+        isThreeLine: true,
       ),
     );
   }

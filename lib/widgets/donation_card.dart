@@ -1,20 +1,31 @@
 import 'package:flutter/material.dart';
-import '../models/donation_model.dart';
 
 class DonationCard extends StatelessWidget {
-  final Donation donation;
-  const DonationCard({super.key, required this.donation});
+  final String id;
+  final String title;
+  final String description;
+  final String location;
+  final String category;
+  final String postedBy;
+
+  const DonationCard({
+    super.key,
+    required this.id,
+    required this.title,
+    required this.description,
+    required this.location,
+    required this.category,
+    required this.postedBy,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: const EdgeInsets.all(10),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-      elevation: 4,
       child: ListTile(
-        title: Text(donation.title, style: const TextStyle(fontWeight: FontWeight.bold)),
-        subtitle: Text("${donation.description}\n📍 ${donation.location}"),
-        trailing: const Icon(Icons.favorite_border, color: Colors.teal),
+        leading: CircleAvatar(backgroundColor: Theme.of(context).colorScheme.primary, child: const Icon(Icons.volunteer_activism, color: Colors.white)),
+        title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
+        subtitle: Text('$description\n📍 $location • $category\nPosted by: $postedBy'),
+        isThreeLine: true,
       ),
     );
   }

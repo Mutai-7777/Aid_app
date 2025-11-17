@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../services/in_memory_store.dart';
+import '../../services/auth_service.dart';
+import '../../services/firestore_service.dart';
 
 class ProfileTab extends StatelessWidget {
-  const ProfileTab({Key? key}) : super(key: key);
+  ProfileTab({super.key});
+  final AuthService _auth = AuthService();
+  final FirestoreService _fs = FirestoreService();
+
+  Future<void> _signOut(BuildContext context) async {
+    await _auth.signOut();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final store = Provider.of<InMemoryStore>(context);
-
+    final user = _auth.currentUser;
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(20),
@@ -16,25 +21,12 @@ class ProfileTab extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Icon(Icons.person, size: 100, color: Colors.teal),
-            const SizedBox(height: 16),
-            Text(
-              store.userName ?? "Unknown User",
-              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            Text(
-              store.role ?? "No role selected",
-              style: const TextStyle(fontSize: 18, color: Colors.grey),
-            ),
-            const SizedBox(height: 30),
-            ElevatedButton.icon(
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.teal),
-              onPressed: () {
-                store.logout();
-                Navigator.pushReplacementNamed(context, '/');
-              },
-              icon: const Icon(Icons.logout),
-              label: const Text("Logout"),
-            ),
+            const SizedBox(height: 12),
+            Text(user?.email ?? 'No email', style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 8),
+            Text('UID: ${user?.uid ?? '—'}', style: const TextStyle(color: Colors.grey)),
+            const SizedBox(height: 20),
+            ElevatedButton.icon(onPressed: () => _signOut(context), icon: const Icon(Icons.logout), label: const Text('Logout')),
           ],
         ),
       ),

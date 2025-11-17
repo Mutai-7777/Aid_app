@@ -1,88 +1,44 @@
-// import 'package:flutter/material.dart';
-// import 'package:provider/provider.dart';
-// import '../../services/in_memory_store.dart';
-// import '../../widgets/donation_card.dart';
-// import 'post_donation_screen.dart';
-
-// class DonationsTab extends StatelessWidget {
-//   const DonationsTab({Key? key}) : super(key: key);
-
-//   @override
-//   Widget build(BuildContext context) {
-//     final store = Provider.of<InMemoryStore>(context);
-
-//     return Scaffold(
-//       body: ListView.builder(
-//         itemCount: store.donations.length,
-//         itemBuilder: (context, index) =>
-//             DonationCard(donation: store.donations[index]),
-//       ),
-//       floatingActionButton: FloatingActionButton(
-//         backgroundColor: Colors.teal,
-//         onPressed: () => Navigator.push(
-//           context,
-//           MaterialPageRoute(builder: (_) => const PostDonationScreen()),
-//         ),
-//         child: const Icon(Icons.add),
-//       ),
-//     );
-//   }
-// }
-
-// lib/screens/donations/donations_tab.dart (stateful)
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import '../../services/api_service.dart';
+import '../../services/firestore_service.dart';
+import '../../widgets/donation_card.dart';
+import 'post_donation_screen.dart';
 
-class DonationsTab extends StatefulWidget {
-  const DonationsTab({super.key});
-  @override
-  State<DonationsTab> createState() => _DonationsTabState();
-}
-
-class _DonationsTabState extends State<DonationsTab> {
-  List<dynamic> donations = [];
-  bool loading = true;
-
-  @override
-  void initState() {
-    super.initState();
-    load();
-  }
-
-  Future<void> load() async {
-    try {
-      final data = await ApiService.fetchDonations();
-      setState(() {
-        donations = data;
-        loading = false;
-      });
-    } catch (e) {
-      setState(() => loading = false);
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
-    }
-  }
+class DonationsTab extends StatelessWidget {
+   DonationsTab({super.key});
+  final FirestoreService _fs =  FirestoreService();
 
   @override
   Widget build(BuildContext context) {
-    if (loading) return const Center(child: CircularProgressIndicator());
-    return RefreshIndicator(
-      onRefresh: load,
-      child: ListView.builder(
-        itemCount: donations.length,
-        itemBuilder: (context, i) {
-          final d = donations[i];
-          return ListTile(
-            title: Text(d['title']),
-            subtitle: Text(d['description'] ?? ''),
-            trailing: TextButton(
-              child: const Text('Delete'),
-              onPressed: () async {
-                await ApiService.deleteDonation(d['id']);
-                await load();
-              },
-            ),
+    return Scaffold(
+      body: StreamBuilder<QuerySnapshot>(
+        stream: _fs.donationsStream(),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) return const Center(child: Text('Error loading donations'));
+          if (!snapshot.hasData) return const Center(child: CircularProgressIndicator());
+          final docs = snapshot.data!.docs;
+          if (docs.isEmpty) return const Center(child: Text('No donations yet'));
+          return ListView.builder(
+            padding: const EdgeInsets.all(12),
+            itemCount: docs.length,
+            itemBuilder: (context, i) {
+              final d = docs[i];
+              final data = d.data() as Map<String, dynamic>;
+              return DonationCard(
+                id: d.id,
+                title: data['title'] ?? '',
+                description: data['description'] ?? '',
+                location: data['location'] ?? '',
+                category: data['category'] ?? '',
+                postedBy: data['posted_by'] ?? data['postedBy'] ?? 'Unknown',
+              );
+            },
           );
         },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const PostDonationScreen())),
+        child: const Icon(Icons.add),
       ),
     );
   }
